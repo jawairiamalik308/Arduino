@@ -1,57 +1,66 @@
-//Programmer : JoJo Malik
-//Program : Blind Spot Monitor
+const int zero[7] = {HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, LOW};
+const int one[7] = {LOW, HIGH, HIGH, LOW, LOW, LOW, LOW};
+const int two[7] = {HIGH, HIGH, LOW, HIGH, HIGH, LOW, HIGH};
+const int three[7] = {HIGH, HIGH, HIGH, HIGH, LOW, LOW, HIGH};
+const int four[7] = {LOW, HIGH, HIGH, LOW, LOW, HIGH, HIGH};
+const int five[7] = {HIGH, LOW, HIGH, HIGH, LOW, HIGH, HIGH};
+const int six[7] = {HIGH, LOW, HIGH, HIGH, HIGH, HIGH, HIGH};
+const int seven[7] = {HIGH, HIGH, HIGH, LOW, LOW, LOW, LOW};
+const int eight[7] = {HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH};
+const int nine[7] = {HIGH, HIGH, HIGH, LOW, LOW, HIGH, HIGH};
 
+const int* digits[10] = {zero, one, two, three, four, five, six, seven, eight, nine};
 
-int trigPin = 7;
-int echoPin = 6;
-int LEDlampRed = 9;
-int  LEDlampWhite = 10;
-int LEDlampBlue = 11;
-int soundbuzzer = 3;
-int sound  = 500;
+const int firstSegmentPin = 2;
+const int lastSegmentPin = 8;
 
+const int firstMuxPin = 9;
+const int lastMuxPin = 12;
 
-void setup() {
-  Serial.begin (9600);
-  pinMode(trigPin,  OUTPUT);
-  pinMode(echoPin, INPUT);
-  pinMode(LEDlampRed, OUTPUT);
-  pinMode(LEDlampWhite,  OUTPUT);
-  pinMode(LEDlampBlue, OUTPUT);
-  pinMode(soundbuzzer, OUTPUT);
+const int displayDigitCount = 4;
+
+void resetDisplay()
+{
+for (int i = firstMuxPin; i <= lastMuxPin; ++i)
+{
+digitalWrite(i, HIGH);
 }
-void  loop() {
-  long durationindigit, distanceinft;
-  digitalWrite(trigPin, LOW);  
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  durationindigit = pulseIn(echoPin, HIGH);
-  distanceinft = (durationindigit/5) / 29.1;
+}
 
-  if (distanceinft > 10){
-    Serial.println("We have not detected any cars. Change lanes if you want.");
-   
-  }
+void writeDisplayDigit(int value, int index)
+{
+for (int i = 0; i < 7; ++i)
+{
+digitalWrite(i + firstSegmentPin, digits[value][i]);
+}
 
+digitalWrite(index + firstMuxPin, LOW);
+}
 
-  if (distanceinft <= 10 && distanceinft >= 7) {
-    digitalWrite(LEDlampRed, HIGH); 
-    Serial.println("There is another car within");
-    Serial.print(distanceinft); 
-    Serial.println(" feet from your blind spot \nGetting close - change lanes with caution\n");
-  
-  }
+void writeDisplay(int values[displayDigitCount])
+{
+for (int i = 0; i < displayDigitCount; ++i)
+{
+resetDisplay();
+writeDisplayDigit(values[i], i);
+delay(1);
+}
+}
 
-  else {
-    digitalWrite(LEDlampRed, LOW);
-  }
+// the setup routine runs once when you press reset:
+void setup()
+{
+for (int i = firstSegmentPin; i <= lastMuxPin; ++i)
+{
+pinMode(i, OUTPUT); // initialize the digital pins as outputs.
+}
 
+resetDisplay();
+}
 
-
-
-
-  
-  delay(1000);
+// the loop routine runs over and over again forever:
+void loop()
+{
+int values[4] = {0,2,1,3};
+writeDisplay(values);
 }
