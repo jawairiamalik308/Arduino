@@ -148,7 +148,15 @@ digitalWrite(pinD, HIGH);
 digitalWrite(pinE, HIGH);
 digitalWrite(pinF, HIGH);
 digitalWrite(pinG, LOW);
-delay(1000); // wait for a second
+
+digitalWrite(pinA, LOW);
+digitalWrite(pinB, LOW);
+digitalWrite(pinC, LOW);
+digitalWrite(pinD, LOW);
+digitalWrite(pinE, LOW);
+digitalWrite(pinF, LOW);
+digitalWrite(pinG, LOW);
+
 digitalWrite(pinA, HIGH);
 digitalWrite(pinB, HIGH);
 digitalWrite(pinC, HIGH);
@@ -156,7 +164,6 @@ digitalWrite(pinD, HIGH);
 digitalWrite(pinE, HIGH);
 digitalWrite(pinF, HIGH);
 digitalWrite(pinG, LOW);
-delay(100); // wait for a second
 }
 
 void s1(){
@@ -216,5 +223,8 @@ s1();
 n0();
 s1();
 n00();
+
+
+
 
 }
